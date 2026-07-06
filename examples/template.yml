@@ -1,0 +1,39 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: a-simple-template
+  title: A simple template
+  description: This simple template is used for learning purposes.
+spec:
+  owner: rhdeveloper-book-authors
+  type: service
+parameters:
+  - title: Enter some (required *) component parameters
+    required:
+      - name
+    properties:
+      name:
+        title: Name
+        type: string
+        description: unique name for this component
+        default: my-component-123
+      owner:
+        title: Owner
+        type: string
+        description: owner of this component
+        ui:field: EntityPicker
+        ui:options:
+          catalogFilter:
+            kind: [User]
+  - title: Choose a repository location
+    required:
+      - repoUrl
+    properties:
+      repoUrl:
+        title: Repository Location
+        type: string
+        ui:field: RepoUrlPicker
+        ui:options:
+          allowedHosts:
+            - github.com
+            - gitlab.com
