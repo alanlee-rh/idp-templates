@@ -37,3 +37,27 @@ spec:
             allowedHosts:
               - github.com
               - gitlab.com
+  steps:
+    - id: templateSource
+      name: Generating the source code component
+      action: fetch:template
+      input:
+        url: ./skeleton
+        targetPath: ./source
+        values:
+          name: ${{ parameters.name }}
+    - id: publishSource
+      name: Publishing to the source code repository
+      action: publish:github
+      input:
+        sourcePath: ./source
+        description: Source code repository for component ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: main
+        repoVisibility: public
+    - id: registerComponent
+      name: Register component into the catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publishSource.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
